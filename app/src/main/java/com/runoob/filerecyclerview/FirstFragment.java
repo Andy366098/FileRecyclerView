@@ -159,7 +159,7 @@ public class FirstFragment extends Fragment {
                         }
                     }
                     if(!flag){
-                        Toast.makeText(getActivity().getApplicationContext(),"帳號不正確！",Toast.LENGTH_LONG).show();
+                        Toast.makeText(getActivity().getApplicationContext(),"不存在的帳號",Toast.LENGTH_LONG).show();
                         binding.editAccount.setText("");
                         binding.editPassword.setText("");
                     }

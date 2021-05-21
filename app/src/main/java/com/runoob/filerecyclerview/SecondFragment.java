@@ -40,6 +40,9 @@ public class SecondFragment extends Fragment {
     private MyListAdapter myListAdapter;
     private ArrayList<HashMap<String,String>> arrayList = new ArrayList<>();
     private String[] login;
+    private int cbVisibility;
+    private boolean[] cbState;
+    private final int howMuchData = 3;
     @Override
     public View onCreateView(
             LayoutInflater inflater, ViewGroup container,
@@ -81,20 +84,29 @@ public class SecondFragment extends Fragment {
         binding.fabDelete.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                /*if (v.findViewById(R.id.cbSelect).getVisibility() == View.GONE){        //設置切換顯示CheckBox們及確定刪除紐
+                /*if (v.findViewById(R.id.cbSelect).getVisibility() == View.GONE){        //設置切換顯示CheckBox們及確定刪除紐，但現在會閃退
                     v.findViewById(R.id.cbSelect).setVisibility(View.VISIBLE);
                     binding.fabCheckDelete.setVisibility(View.VISIBLE);
                 }else if(v.findViewById(R.id.cbSelect).getVisibility() == View.VISIBLE){
                     v.findViewById(R.id.cbSelect).setVisibility(View.GONE);
                     binding.fabCheckDelete.setVisibility(View.INVISIBLE);
                 }*/
+                if(cbVisibility == View.GONE){
+                    cbVisibility = View.VISIBLE;
+                    binding.fabCheckDelete.setVisibility(View.VISIBLE);
+                }else if(cbVisibility == View.VISIBLE){
+                    cbVisibility = View.GONE;
+                    binding.fabCheckDelete.setVisibility(View.INVISIBLE);
+
+                }
+                myListAdapter.notifyDataSetChanged();
             }
         });
         //浮游確定刪除紐
         binding.fabCheckDelete.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                /*readFile();
+               /*readFile();
                 File path = getContext().getExternalFilesDir("").getAbsoluteFile();     //路徑為外部儲存的包下
                 File file = new File(path, "login.txt");   //前面為路徑後面為檔名
                 try {
@@ -150,7 +162,7 @@ public class SecondFragment extends Fragment {
         }
     }
     private void makeData() {               //用HashMap來創建列表選項
-        for (int i = 0;i<login.length;i+=3){
+        for (int i = 0;i<login.length;i+=howMuchData){
             HashMap<String,String> hashMap = new HashMap<>();
             hashMap.put("Account",login[i]);    //把帳號放到標籤為Account的地方
             hashMap.put("Password",login[i+1]);
@@ -159,23 +171,23 @@ public class SecondFragment extends Fragment {
         }
     }
     private class MyListAdapter extends RecyclerView.Adapter<MyListAdapter.ViewHolder>{
-        public boolean[] cbHow = new boolean[login.length/3];//此處新增一個boolean型別的陣列
+        private boolean[] cbHow = new boolean[login.length/howMuchData];//此處新增一個boolean型別的陣列
         class ViewHolder extends RecyclerView.ViewHolder{       //可以看成是宣告每一個列表選項所持有的元件
             private TextView tvSub1,tvSub2,tvDate;
-            private CheckBox cbSelect;
+            public CheckBox cbSelect;
             private View mView;
             public ViewHolder(@NonNull View itemView) {
                 super(itemView);
                 tvSub1 = itemView.findViewById(R.id.textView_sub1);
                 tvSub2 = itemView.findViewById(R.id.textView_sub2);
                 tvDate  = itemView.findViewById(R.id.createDate);
-                //cbSelect = itemView.findViewById(R.id.cbSelect);
+                cbSelect = itemView.findViewById(R.id.cbSelect);
                 mView  = itemView;
             }
         }
         @NonNull
         @Override
-        public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {     //創建列表元件到指定的xml
+        public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {     //由指定的xml創建列表項目
             View view = LayoutInflater.from(parent.getContext())
                     .inflate(R.layout.recycler_item,parent,false);
             return new ViewHolder(view);
@@ -186,7 +198,8 @@ public class SecondFragment extends Fragment {
             holder.tvSub1.setText(arrayList.get(position).get("Account"));
             holder.tvSub2.setText(arrayList.get(position).get("Password"));
             holder.tvDate.setText(arrayList.get(position).get("Date"));
-            /*//in some cases, it will prevent unwanted situations
+            holder.cbSelect.setVisibility(cbVisibility);
+            //in some cases, it will prevent unwanted situations
             holder.cbSelect.setOnCheckedChangeListener(null);//先設定一次CheckBox的選中監聽器，傳入引數null
             //if true, your checkbox will be selected, else unselected
             holder.cbSelect.setChecked(cbHow[position]);//用陣列中的值設定CheckBox的選中狀態
@@ -197,7 +210,7 @@ public class SecondFragment extends Fragment {
                     //set your object's last status
                     cbHow[position] = isChecked;
                 }
-            });*/
+            });
             holder.mView.setOnClickListener((v)->{
                 Toast.makeText(getActivity().getBaseContext(),"這個帳號是在" + holder.tvDate.getText() + "時創立的",Toast.LENGTH_SHORT).show();
             });
