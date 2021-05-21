@@ -41,7 +41,7 @@ public class SecondFragment extends Fragment {
     private ArrayList<HashMap<String,String>> arrayList = new ArrayList<>();
     private String[] login;
     private int cbVisibility;
-    private boolean[] cbState;
+    private boolean[] cbHow;//此處新增一個boolean型別的陣列
     private final int howMuchData = 3;
     @Override
     public View onCreateView(
@@ -59,6 +59,8 @@ public class SecondFragment extends Fragment {
         //讀入資料與製作列表
         readFile();
         makeData();
+        cbHow = new boolean[login.length/howMuchData];      //初始化設置checkbox狀態的陣列
+        cbVisibility = View.GONE;                           //初始將checkBox設置為不可見且不保留空間
         binding.buttonSecond.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -84,20 +86,15 @@ public class SecondFragment extends Fragment {
         binding.fabDelete.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                /*if (v.findViewById(R.id.cbSelect).getVisibility() == View.GONE){        //設置切換顯示CheckBox們及確定刪除紐，但現在會閃退
-                    v.findViewById(R.id.cbSelect).setVisibility(View.VISIBLE);
-                    binding.fabCheckDelete.setVisibility(View.VISIBLE);
-                }else if(v.findViewById(R.id.cbSelect).getVisibility() == View.VISIBLE){
-                    v.findViewById(R.id.cbSelect).setVisibility(View.GONE);
-                    binding.fabCheckDelete.setVisibility(View.INVISIBLE);
-                }*/
-                if(cbVisibility == View.GONE){
+                if(cbVisibility == View.GONE){                      //設置切換顯示CheckBox們及確定刪除紐
                     cbVisibility = View.VISIBLE;
                     binding.fabCheckDelete.setVisibility(View.VISIBLE);
                 }else if(cbVisibility == View.VISIBLE){
                     cbVisibility = View.GONE;
                     binding.fabCheckDelete.setVisibility(View.INVISIBLE);
-
+                    for(int i = 0;i < cbHow.length;i++){
+                        cbHow[i] = false;
+                    }
                 }
                 myListAdapter.notifyDataSetChanged();
             }
@@ -106,33 +103,36 @@ public class SecondFragment extends Fragment {
         binding.fabCheckDelete.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-               /*readFile();
-                File path = getContext().getExternalFilesDir("").getAbsoluteFile();     //路徑為外部儲存的包下
-                File file = new File(path, "login.txt");   //前面為路徑後面為檔名
-                try {
-                    FileOutputStream fout = new FileOutputStream(file,true);
-                    BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(fout));
-                    writer.write(binding.editAccount.getText().toString());
-                    writer.write("\n");
-                    writer.write(binding.editPassword.getText().toString());
-                    writer.write("\n");
-                    writer.write(date);
-                    writer.write("\n");
-                    writer.close();
-                    fout.close();
+                readFile();
 
-                    new AlertDialog.Builder(getActivity())
-                            .setTitle("註冊成功！")
-                            .setMessage("帳號：" + binding.editAccount.getText().toString() +
-                                    "\n密碼：" + binding.editPassword.getText().toString() +
-                                    "\n註冊日期：" + date)
-                            .show();
-                    binding.editAccount.setText("");
-                    binding.editPassword.setText("");
-                }catch (Exception e){
-                    Toast.makeText(getActivity().getApplicationContext(),"未成功註冊",Toast.LENGTH_LONG).show();
-                    e.printStackTrace();
+                /*for (int i = 0;i < cbHow.length;i++){
+                    if (cbHow[i] == true){
+                        login[i] = "";
+                        login[i+1] = "";
+                        login[i+2] = "";
+                        File path = getContext().getExternalFilesDir("").getAbsoluteFile();     //路徑為外部儲存的包下
+                        File file = new File(path, "login.txt");   //前面為路徑後面為檔名
+
+                        try {
+                            FileOutputStream fout = new FileOutputStream(file,true);
+                            BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(fout));
+                            writer.write(login[i]);
+                            writer.write("\n");
+                            writer.write(login[i+1]);
+                            writer.write("\n");
+                            writer.write(login[i+2]);
+                            writer.write("\n");
+                            writer.close();
+                            fout.close();
+                        }catch (Exception e){
+                            Toast.makeText(getActivity().getApplicationContext(),"未成功刪除檔案",Toast.LENGTH_LONG).show();
+                            e.printStackTrace();
+                        }
+                    }
                 }*/
+
+
+
             }
         });
     }
@@ -171,7 +171,7 @@ public class SecondFragment extends Fragment {
         }
     }
     private class MyListAdapter extends RecyclerView.Adapter<MyListAdapter.ViewHolder>{
-        private boolean[] cbHow = new boolean[login.length/howMuchData];//此處新增一個boolean型別的陣列
+
         class ViewHolder extends RecyclerView.ViewHolder{       //可以看成是宣告每一個列表選項所持有的元件
             private TextView tvSub1,tvSub2,tvDate;
             public CheckBox cbSelect;
