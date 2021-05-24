@@ -1,0 +1,121 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".WaveFragment">
+
+    <!-- TODO: Update blank fragment layout -->
+    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="#7c7c7c"
+        android:orientation="vertical">
+
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:gravity="center"
+            android:text="波形圖"
+            android:textColor="#ffffff"
+            android:textSize="20dp" />
+
+
+
+        <RelativeLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center">
+
+            <TextView
+                android:id="@+id/text_hz"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="10dp"
+                android:layout_marginLeft="10dp"
+                android:text="Frequency"
+                android:textColor="#ffffff"
+                android:textSize="20dp" />
+
+            <SeekBar
+                android:id="@+id/seekBar_Hz"
+                android:layout_width="300dp"
+                android:layout_height="wrap_content"
+
+                android:layout_below="@id/text_hz"
+                android:layout_marginStart="10dp"
+                android:layout_marginLeft="10dp"
+                android:layout_marginBottom="20dp"
+                android:max="50"
+                android:maxHeight="2dp"
+                android:minHeight="20dp" />
+
+            <TextView
+                android:id="@+id/value_hz"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/text_hz"
+                android:layout_toRightOf="@id/seekBar_Hz"
+                android:text="25"
+                android:textColor="#ffffff" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/text_hz"
+                android:layout_centerVertical="true"
+                android:layout_toRightOf="@id/value_hz"
+                android:text="Hz"
+                android:textColor="#ffffff" />
+
+        </RelativeLayout>
+
+
+        <RelativeLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center">
+
+            <TextView
+                android:id="@+id/text_n"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="10dp"
+                android:layout_marginLeft="10dp"
+                android:text="Amplitude"
+                android:textColor="#ffffff"
+                android:textSize="20dp" />
+
+            <SeekBar
+                android:id="@+id/seekBar_N"
+                android:layout_width="300dp"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/text_n"
+                android:layout_marginStart="10dp"
+                android:layout_marginLeft="10dp"
+                android:layout_marginBottom="20dp"
+                android:max="50"
+                android:maxHeight="2dp"
+                android:minHeight="20dp" />
+
+            <TextView
+                android:id="@+id/value_n"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/text_n"
+                android:layout_toRightOf="@id/seekBar_N"
+                android:text="25"
+                android:textColor="#ffffff" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/text_n"
+                android:layout_toRightOf="@id/value_n"
+                android:text="N  "
+                android:textColor="#ffffff" />
+        </RelativeLayout>
+    </LinearLayout>
+</FrameLayout>

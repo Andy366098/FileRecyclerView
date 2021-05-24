@@ -61,7 +61,7 @@ public class SecondFragment extends Fragment {
         makeData();
         cbHow = new boolean[login.length];      //初始化設置checkbox狀態的陣列
         cbVisibility = View.GONE;                           //初始將checkBox設置為不可見且不保留空間
-        binding.buttonSecond.setOnClickListener(new View.OnClickListener() {
+        binding.buttonSecond.setOnClickListener(new View.OnClickListener() {    //沒用到的原本的範例按鈕
             @Override
             public void onClick(View view) {
                 NavHostFragment.findNavController(SecondFragment.this)

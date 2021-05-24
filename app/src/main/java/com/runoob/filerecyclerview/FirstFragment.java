@@ -2,8 +2,12 @@ package com.runoob.filerecyclerview;
 
 import android.Manifest;
 import android.app.AlertDialog;
+import android.content.ComponentName;
 import android.content.DialogInterface;
+import android.content.Intent;
+import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -60,9 +64,29 @@ public class FirstFragment extends Fragment {
         binding.btnOK.setOnClickListener(listener);
         binding.btnRegister.setOnClickListener(listener);
         binding.btnReset.setOnClickListener(listener);
+
+        binding.btnWave.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                //以下這段可以讓你根據應用程式的包名來開啟外部APP，但在API版本30不管用，因此目前是用29
+                Intent intent = getActivity().getPackageManager().getLaunchIntentForPackage("com.cnn.mobile.android.phone");
+                if (intent != null) {
+                    // We found the activity now start the activity
+                    intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                    startActivity(intent);
+                } else {
+                    // Bring user to the market or let them choose an app?
+                    intent = new Intent(Intent.ACTION_VIEW);
+                    intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                    intent.setData(Uri.parse("market://details?id=" + "com.cnn.mobile.android.phone"));
+                    startActivity(intent);
+                }
+            }
+        });
         requestStoragePermission();
 
     }
+
     private void requestStoragePermission(){
         if(Build.VERSION.SDK_INT >= 23){        //Android6.0以上
             //判斷是否已取得驗證
