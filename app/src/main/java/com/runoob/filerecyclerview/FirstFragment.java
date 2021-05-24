@@ -28,6 +28,7 @@ import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.regex.Matcher;
 
 public class FirstFragment extends Fragment {
 
@@ -182,6 +183,7 @@ public class FirstFragment extends Fragment {
                     break;
                 case (R.id.btnRegister):
                     readFile();
+
                     //檢查帳號及密碼是否都有輸入
                     if (binding.editAccount.getText().toString().equals("")){
                         Toast.makeText(getActivity(),"帳號不可為空！",Toast.LENGTH_SHORT).show();
@@ -200,10 +202,10 @@ public class FirstFragment extends Fragment {
                         }
                     }
                     if(!flagHaveA){
-                        SimpleDateFormat sDateFormat = new SimpleDateFormat("yyyy_MM_dd_hh_mm_ss"); //存入資料夾的格式
+                        SimpleDateFormat sDateFormat = new SimpleDateFormat("yyyy/MM/dd hh:mm:ss"); //存入資料夾的格式
                         String date = sDateFormat.format(new Date(System.currentTimeMillis()));
                         File path = getContext().getExternalFilesDir("").getAbsoluteFile();     //路徑為外部儲存的包下
-                        File file = new File(path, "date_"+date + "_login.txt");   //前面為路徑後面為檔名
+                        File file = new File(path, binding.editAccount.getText().toString() + "_login.txt");   //前面為路徑後面為檔名
                         try {
                             FileOutputStream fout = new FileOutputStream(file,true);
                             BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(fout));
@@ -215,15 +217,12 @@ public class FirstFragment extends Fragment {
                             writer.write("\n");
                             writer.close();
                             fout.close();
-
                             new AlertDialog.Builder(getActivity())
                                     .setTitle("註冊成功！")
                                     .setMessage("帳號：" + binding.editAccount.getText().toString() +
                                             "\n密碼：" + binding.editPassword.getText().toString() +
                                             "\n註冊日期：" + date )
                                     .show();
-                            binding.editAccount.setText("");
-                            binding.editPassword.setText("");
                         }catch (Exception e){
                             Toast.makeText(getActivity().getApplicationContext(),"未成功註冊",Toast.LENGTH_LONG).show();
                             e.printStackTrace();

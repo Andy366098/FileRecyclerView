@@ -42,7 +42,6 @@ public class SecondFragment extends Fragment {
     private String[] login;
     private int cbVisibility;
     private boolean[] cbHow;//此處新增一個boolean型別的陣列
-    private final int howMuchData = 3;
     @Override
     public View onCreateView(
             LayoutInflater inflater, ViewGroup container,
@@ -80,7 +79,6 @@ public class SecondFragment extends Fragment {
             makeData();
             myListAdapter.notifyDataSetChanged();
             binding.refreshLayout.setRefreshing(false);
-
         });
         //浮游刪除按鈕
         binding.fabDelete.setOnClickListener(new View.OnClickListener() {
@@ -103,33 +101,24 @@ public class SecondFragment extends Fragment {
         binding.fabCheckDelete.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                readFile();
-
-                /*for (int i = 0;i < cbHow.length;i++){
-                    if (cbHow[i] == true){
-                        login[i] = "";
-                        login[i+1] = "";
-                        login[i+2] = "";
-                        File path = getContext().getExternalFilesDir("").getAbsoluteFile();     //路徑為外部儲存的包下
-                        File file = new File(path, "login.txt");   //前面為路徑後面為檔名
-
-                        try {
-                            FileOutputStream fout = new FileOutputStream(file,true);
-                            BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(fout));
-                            writer.write(login[i]);
-                            writer.write("\n");
-                            writer.write(login[i+1]);
-                            writer.write("\n");
-                            writer.write(login[i+2]);
-                            writer.write("\n");
-                            writer.close();
-                            fout.close();
-                        }catch (Exception e){
-                            Toast.makeText(getActivity().getApplicationContext(),"未成功刪除檔案",Toast.LENGTH_LONG).show();
-                            e.printStackTrace();
+                try {
+                    String p = getContext().getExternalFilesDir("").getAbsoluteFile().toString() ;  //獲取路徑字串
+                    File path = new File(p); //開啟檔案路徑
+                    File[] file = path.listFiles();    //列出所有目錄裡的資料
+                    for (int i = 0;i < file.length;i++){
+                        if (cbHow[i] == true){
+                            file[i].delete();   //刪除檔案
+                            cbHow[i] = false;   //清空所選取的狀態
                         }
                     }
-                }*/
+                }catch (Exception e){
+                    Toast.makeText(getActivity().getApplicationContext(),"未成功刪除檔案",Toast.LENGTH_LONG).show();
+                    e.printStackTrace();
+                }
+                arrayList.clear();
+                readFile();
+                makeData();
+                myListAdapter.notifyDataSetChanged();
             }
         });
     }
@@ -141,9 +130,9 @@ public class SecondFragment extends Fragment {
     }
     //讀取帳密資料存到login陣列
     private void readFile(){
-        String p = getContext().getExternalFilesDir("").getAbsoluteFile().toString() ;
-        File path = new File(p); //包下的位置
-        File[] file = path.listFiles();    //路徑與檔名
+        String p = getContext().getExternalFilesDir("").getAbsoluteFile().toString() ;  //獲取路徑字串
+        File path = new File(p); //開啟檔案路徑
+        File[] file = path.listFiles();    //列出所有目錄裡的資料
         login = new String[file.length];    //在此處定義陣列大小 否則會閃退
         try{
             for (int i = 0;i < file.length;i++){
