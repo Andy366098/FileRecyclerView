@@ -71,7 +71,7 @@ public class FirstFragment extends Fragment {
                 return;
             }
         }
-        FirstWrite();
+        //FirstWrite();
     }
     //requestPermissions 觸發的事件
     @Override
@@ -90,11 +90,16 @@ public class FirstFragment extends Fragment {
     }
     private void FirstWrite(){  //先創建一個空白檔案防止讀不到檔案的閃退
         File path = getContext().getExternalFilesDir("").getAbsoluteFile(); //包下的位置
-        File file = new File(path,"login.txt");    //路徑與檔名
+        File file = new File(path,"0_login.txt");    //路徑與檔名
         try {
-            FileOutputStream fout = new FileOutputStream(file,true);
+            FileOutputStream fout = new FileOutputStream(file,false);
             BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(fout));
-            writer.write("");
+            writer.write("111");
+            writer.write("\n");
+            writer.write("111");
+            writer.write("\n");
+            writer.write("111");
+            writer.write("\n");
             writer.close();
             fout.close();
         }catch (Exception e){
@@ -103,18 +108,24 @@ public class FirstFragment extends Fragment {
     }
     //讀取帳密資料存到login陣列
     private void readFile(){
-        File path = getContext().getExternalFilesDir("").getAbsoluteFile(); //包下的位置
-        File file = new File(path,"login.txt");    //路徑與檔名
+        String p = getContext().getExternalFilesDir("").getAbsoluteFile().toString() ;
+        File path = new File(p); //包下的位置
+        File[] file = path.listFiles();    //路徑與檔名
+        login = new String[file.length];    //在此處定義陣列大小 否則會閃退
         try{
-            FileInputStream fin = new FileInputStream(file);
-            BufferedReader reader = new BufferedReader(new InputStreamReader(fin));
-            String line = "",wholedata = "";
-            while ((line = reader.readLine()) != null){     //當還有資料可以讀入時
-                wholedata = wholedata + line + "\n";        //總資料+行+換行
+            for (int i = 0;i < file.length;i++){
+                FileInputStream fin = new FileInputStream(file[i]);
+                BufferedReader reader = new BufferedReader(new InputStreamReader(fin));
+                String line = "",wholedata = "";
+                while ((line = reader.readLine()) != null){     //當還有資料可以讀入時
+                    wholedata = wholedata + line + "\n";        //總資料+行+換行
+                }
+                login[i] = wholedata;   //把資料存入陣列裡
+                reader.close();
+                fin.close();
+
             }
-            login = wholedata.split("\n");  //用split來拆解字串並存到陣列
-            reader.close();
-            fin.close();
+
         }catch (Exception e){
             Toast.makeText(getActivity().getApplicationContext(),"error!",Toast.LENGTH_SHORT).show();
             e.printStackTrace();
@@ -135,10 +146,11 @@ public class FirstFragment extends Fragment {
                         break;
                     }
                     boolean flag = false;
-                    for(int i = 0;i < login.length;i += 3){
-                        if(binding.editAccount.getText().toString().equals(login[i])){    //帳號存在
+                    for(int i = 0;i < login.length;i++){
+                        String[] data = login[i].split("\n");
+                        if(binding.editAccount.getText().toString().equals(data[0])){    //帳號存在
                             flag = true;
-                            if (binding.editPassword.getText().toString().equals(login[i+1])){ //密碼正確
+                            if (binding.editPassword.getText().toString().equals(data[1])){ //密碼正確
                                 new AlertDialog.Builder(getActivity())
                                         .setTitle("登入")
                                         .setMessage("登入成功！\n歡迎使用本應用程式")
@@ -179,20 +191,22 @@ public class FirstFragment extends Fragment {
                         break;
                     }
                     boolean flagHaveA = false;
-                    for(int i = 0;i < login.length;i += 2){
-                        if(binding.editAccount.getText().toString().equals(login[i])){    //帳號存在
-                            Toast.makeText(getActivity().getApplicationContext(),"此帳號已存在",Toast.LENGTH_LONG).show();
+                    for(int i = 0;i < login.length;i++){
+                        String[] data = login[i].split("\n");
+                        if(binding.editAccount.getText().toString().equals(data[0])) {    //帳號存在
+                            Toast.makeText(getActivity().getApplicationContext(), "此帳號已存在", Toast.LENGTH_LONG).show();
                             flagHaveA = true;
+                            break;
                         }
                     }
                     if(!flagHaveA){
+                        SimpleDateFormat sDateFormat = new SimpleDateFormat("yyyy_MM_dd_hh_mm_ss"); //存入資料夾的格式
+                        String date = sDateFormat.format(new Date(System.currentTimeMillis()));
                         File path = getContext().getExternalFilesDir("").getAbsoluteFile();     //路徑為外部儲存的包下
-                        File file = new File(path, "login.txt");   //前面為路徑後面為檔名
+                        File file = new File(path, "date_"+date + "_login.txt");   //前面為路徑後面為檔名
                         try {
                             FileOutputStream fout = new FileOutputStream(file,true);
                             BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(fout));
-                            SimpleDateFormat sDateFormat = new SimpleDateFormat("yyyy/MM/dd hh:mm:ss");
-                            String date = sDateFormat.format(new Date(System.currentTimeMillis()));
                             writer.write(binding.editAccount.getText().toString());
                             writer.write("\n");
                             writer.write(binding.editPassword.getText().toString());
@@ -206,7 +220,7 @@ public class FirstFragment extends Fragment {
                                     .setTitle("註冊成功！")
                                     .setMessage("帳號：" + binding.editAccount.getText().toString() +
                                             "\n密碼：" + binding.editPassword.getText().toString() +
-                                            "\n註冊日期：" + date)
+                                            "\n註冊日期：" + date )
                                     .show();
                             binding.editAccount.setText("");
                             binding.editPassword.setText("");

@@ -59,7 +59,7 @@ public class SecondFragment extends Fragment {
         //讀入資料與製作列表
         readFile();
         makeData();
-        cbHow = new boolean[login.length/howMuchData];      //初始化設置checkbox狀態的陣列
+        cbHow = new boolean[login.length];      //初始化設置checkbox狀態的陣列
         cbVisibility = View.GONE;                           //初始將checkBox設置為不可見且不保留空間
         binding.buttonSecond.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -130,9 +130,6 @@ public class SecondFragment extends Fragment {
                         }
                     }
                 }*/
-
-
-
             }
         });
     }
@@ -144,29 +141,36 @@ public class SecondFragment extends Fragment {
     }
     //讀取帳密資料存到login陣列
     private void readFile(){
-        File path = getContext().getExternalFilesDir("").getAbsoluteFile(); //包下的位置
-        File file = new File(path,"login.txt");    //路徑與檔名
+        String p = getContext().getExternalFilesDir("").getAbsoluteFile().toString() ;
+        File path = new File(p); //包下的位置
+        File[] file = path.listFiles();    //路徑與檔名
+        login = new String[file.length];    //在此處定義陣列大小 否則會閃退
         try{
-            FileInputStream fin = new FileInputStream(file);
-            BufferedReader reader = new BufferedReader(new InputStreamReader(fin));
-            String line = "",wholedata = "";
-            while ((line = reader.readLine()) != null){     //當還有資料可以讀入時
-                wholedata = wholedata + line + "\n";        //總資料+行+換行
+            for (int i = 0;i < file.length;i++){
+                FileInputStream fin = new FileInputStream(file[i]);
+                BufferedReader reader = new BufferedReader(new InputStreamReader(fin));
+                String line = "",wholedata = "";
+                while ((line = reader.readLine()) != null){     //當還有資料可以讀入時
+                    wholedata = wholedata + line + "\n";        //總資料+行+換行
+                }
+                login[i] = wholedata;   //把資料存入陣列裡
+                reader.close();
+                fin.close();
+
             }
-            login = wholedata.split("\n");  //用split來拆解字串並存到陣列
-            reader.close();
-            fin.close();
+
         }catch (Exception e){
             Toast.makeText(getActivity().getApplicationContext(),"error!",Toast.LENGTH_SHORT).show();
             e.printStackTrace();
         }
     }
     private void makeData() {               //用HashMap來創建列表選項
-        for (int i = 0;i<login.length;i+=howMuchData){
+        for (int i = 0;i<login.length;i++){
             HashMap<String,String> hashMap = new HashMap<>();
-            hashMap.put("Account",login[i]);    //把帳號放到標籤為Account的地方
-            hashMap.put("Password",login[i+1]);
-            hashMap.put("Date",login[i+2]);
+            String[] data = login[i].split("\n");
+            hashMap.put("Account",data[0]);    //把帳號放到標籤為Account的地方
+            hashMap.put("Password",data[1]);
+            hashMap.put("Date",data[2]);
             arrayList.add(hashMap);
         }
     }
