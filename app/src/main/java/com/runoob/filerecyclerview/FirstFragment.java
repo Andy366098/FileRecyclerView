@@ -72,7 +72,7 @@ public class FirstFragment extends Fragment {
                 return;
             }
         }
-        //FirstWrite();
+
     }
     //requestPermissions 觸發的事件
     @Override
@@ -89,24 +89,7 @@ public class FirstFragment extends Fragment {
         }
 
     }
-    private void FirstWrite(){  //先創建一個空白檔案防止讀不到檔案的閃退
-        File path = getContext().getExternalFilesDir("").getAbsoluteFile(); //包下的位置
-        File file = new File(path,"0_login.txt");    //路徑與檔名
-        try {
-            FileOutputStream fout = new FileOutputStream(file,false);
-            BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(fout));
-            writer.write("111");
-            writer.write("\n");
-            writer.write("111");
-            writer.write("\n");
-            writer.write("111");
-            writer.write("\n");
-            writer.close();
-            fout.close();
-        }catch (Exception e){
-            e.printStackTrace();
-        }
-    }
+
     //讀取帳密資料存到login陣列
     private void readFile(){
         String p = getContext().getExternalFilesDir("").getAbsoluteFile().toString() ;

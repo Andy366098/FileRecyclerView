@@ -1,6 +1,7 @@
 package com.runoob.filerecyclerview;
 
 import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -101,24 +102,38 @@ public class SecondFragment extends Fragment {
         binding.fabCheckDelete.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                try {
-                    String p = getContext().getExternalFilesDir("").getAbsoluteFile().toString() ;  //獲取路徑字串
-                    File path = new File(p); //開啟檔案路徑
-                    File[] file = path.listFiles();    //列出所有目錄裡的資料
-                    for (int i = 0;i < file.length;i++){
-                        if (cbHow[i] == true){
-                            file[i].delete();   //刪除檔案
-                            cbHow[i] = false;   //清空所選取的狀態
-                        }
-                    }
-                }catch (Exception e){
-                    Toast.makeText(getActivity().getApplicationContext(),"未成功刪除檔案",Toast.LENGTH_LONG).show();
-                    e.printStackTrace();
-                }
-                arrayList.clear();
-                readFile();
-                makeData();
-                myListAdapter.notifyDataSetChanged();
+                new AlertDialog.Builder(getActivity())
+                        .setMessage("Delete?")
+                        .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                try {
+                                    String p = getContext().getExternalFilesDir("").getAbsoluteFile().toString() ;  //獲取路徑字串
+                                    File path = new File(p); //開啟檔案路徑
+                                    File[] file = path.listFiles();    //列出所有目錄裡的資料
+                                    for (int i = 0;i < file.length;i++){
+                                        if (cbHow[i] == true){
+                                            file[i].delete();   //刪除檔案
+                                            cbHow[i] = false;   //清空所選取的狀態
+                                        }
+                                    }
+                                }catch (Exception e){
+                                    Toast.makeText(getActivity().getApplicationContext(),"未成功刪除檔案",Toast.LENGTH_LONG).show();
+                                    e.printStackTrace();
+                                }
+                                arrayList.clear();
+                                readFile();
+                                makeData();
+                                myListAdapter.notifyDataSetChanged();
+                            }
+                        })
+                        .setNeutralButton("No", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+
+                            }
+                        })
+                        .show();
             }
         });
     }
@@ -145,9 +160,7 @@ public class SecondFragment extends Fragment {
                 login[i] = wholedata;   //把資料存入陣列裡
                 reader.close();
                 fin.close();
-
             }
-
         }catch (Exception e){
             Toast.makeText(getActivity().getApplicationContext(),"error!",Toast.LENGTH_SHORT).show();
             e.printStackTrace();
