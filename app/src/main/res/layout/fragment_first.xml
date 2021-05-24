@@ -100,7 +100,7 @@
         android:id="@+id/btnWave"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="波"
+        android:text="跳至CNN"
         app:layout_constraintEnd_toStartOf="@+id/btnRegister"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/btnOK" />
