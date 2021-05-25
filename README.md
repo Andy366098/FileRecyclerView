@@ -9,4 +9,4 @@
 額外還付了一個練習用的跳轉至外部程式的按鈕
 
 展示：
-![image] https://github.com/Andy366098/FileRecyclerView/blob/master/Screenshot_20210525-090249816.jpg
+![image] (https://github.com/Andy366098/FileRecyclerView/blob/master/Screenshot_20210525-090249816.jpg)
