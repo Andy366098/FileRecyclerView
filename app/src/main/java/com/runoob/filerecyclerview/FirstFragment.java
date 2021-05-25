@@ -83,7 +83,7 @@ public class FirstFragment extends Fragment {
                 }
             }
         });
-        requestStoragePermission();
+        requestStoragePermission();     //自定義的方法判斷是否取得驗證
 
     }
 
@@ -103,7 +103,7 @@ public class FirstFragment extends Fragment {
     public void onRequestPermissionsResult(int requestCode,@NonNull String[] permissions,@NonNull int[] grantResults) {
         if(requestCode == 1){
             if(grantResults[0] == PackageManager.PERMISSION_GRANTED){   //按允許鈕
-                //readFile();
+                //readFile();   //我把它移到按鈕時才觸發
             }else {
                 Toast.makeText(getActivity(),"未取得權限！",Toast.LENGTH_SHORT).show();
                 getActivity().finish(); //結束應用程式
@@ -116,14 +116,14 @@ public class FirstFragment extends Fragment {
 
     //讀取帳密資料存到login陣列
     private void readFile(){
-        String p = getContext().getExternalFilesDir("").getAbsoluteFile().toString() ;
-        File path = new File(p); //包下的位置
-        File[] file = path.listFiles();    //路徑與檔名
-        login = new String[file.length];    //在此處定義陣列大小 否則會閃退
+        String p = getContext().getExternalFilesDir("").getAbsoluteFile().toString() ;//獲取包下的路徑字串
+        File path = new File(p); //開啟檔案路徑
+        File[] file = path.listFiles();    //列出所有目錄裡的資料放到陣列裡
+        login = new String[file.length];    //在此處定義所要存入的陣列大小 否則會因無宣告初始值而閃退
         try{
             for (int i = 0;i < file.length;i++){
-                FileInputStream fin = new FileInputStream(file[i]);
-                BufferedReader reader = new BufferedReader(new InputStreamReader(fin));
+                FileInputStream fin = new FileInputStream(file[i]);         //用這個來讀取
+                BufferedReader reader = new BufferedReader(new InputStreamReader(fin)); //加速讀取，使其能夠一次讀取一行
                 String line = "",wholedata = "";
                 while ((line = reader.readLine()) != null){     //當還有資料可以讀入時
                     wholedata = wholedata + line + "\n";        //總資料+行+換行
@@ -143,7 +143,7 @@ public class FirstFragment extends Fragment {
         @Override
         public void onClick(View v) {
             switch (v.getId()){
-                case (R.id.btnOK):      //登入
+                case (R.id.btnOK):      //登入按鈕
                     readFile();     //讀取帳密資料存到login陣列
                     //檢查帳號及密碼是否都有輸入
                     if (binding.editAccount.getText().toString().equals("")){
@@ -159,7 +159,7 @@ public class FirstFragment extends Fragment {
                         if(binding.editAccount.getText().toString().equals(data[0])){    //帳號存在
                             flag = true;
                             if (binding.editPassword.getText().toString().equals(data[1])){ //密碼正確
-                                new AlertDialog.Builder(getActivity())
+                                new AlertDialog.Builder(getActivity())  //跳窗提示訊息
                                         .setTitle("登入")
                                         .setMessage("登入成功！\n歡迎使用本應用程式")
                                         .setPositiveButton("確定", new DialogInterface.OnClickListener() {
@@ -188,7 +188,7 @@ public class FirstFragment extends Fragment {
                     binding.editAccount.setText("");
                     binding.editPassword.setText("");
                     break;
-                case (R.id.btnRegister):
+                case (R.id.btnRegister):    //註冊按鈕
                     readFile();
 
                     //檢查帳號及密碼是否都有輸入
@@ -214,10 +214,10 @@ public class FirstFragment extends Fragment {
                         File path = getContext().getExternalFilesDir("").getAbsoluteFile();     //路徑為外部儲存的包下
                         File file = new File(path, binding.editAccount.getText().toString() + "_login.txt");   //前面為路徑後面為檔名
                         try {
-                            FileOutputStream fout = new FileOutputStream(file,true);
-                            BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(fout));
+                            FileOutputStream fout = new FileOutputStream(file,true);        //用這個來寫入
+                            BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(fout));//用這個來加速，否則原本只能寫入以byte為單位的資料
                             writer.write(binding.editAccount.getText().toString());
-                            writer.write("\n");
+                            writer.write("\n");     //換行
                             writer.write(binding.editPassword.getText().toString());
                             writer.write("\n");
                             writer.write(date);

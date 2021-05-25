@@ -38,7 +38,7 @@ public class SecondFragment extends Fragment {
 
     private FragmentSecondBinding binding;
 
-    private MyListAdapter myListAdapter;
+    private MyListAdapter myListAdapter;    //自定義的適配器
     private ArrayList<HashMap<String,String>> arrayList = new ArrayList<>();
     private String[] login;
     private int cbVisibility;
@@ -79,7 +79,7 @@ public class SecondFragment extends Fragment {
             readFile();
             makeData();
             myListAdapter.notifyDataSetChanged();
-            binding.refreshLayout.setRefreshing(false);
+            binding.refreshLayout.setRefreshing(false);     //關閉轉圈圈
         });
         //浮游刪除按鈕
         binding.fabDelete.setOnClickListener(new View.OnClickListener() {
@@ -92,10 +92,10 @@ public class SecondFragment extends Fragment {
                     cbVisibility = View.GONE;
                     binding.fabCheckDelete.setVisibility(View.INVISIBLE);
                     for(int i = 0;i < cbHow.length;i++){
-                        cbHow[i] = false;
+                        cbHow[i] = false;                           //以全域變數boolean值來控制checkBox的選中狀態
                     }
                 }
-                myListAdapter.notifyDataSetChanged();
+                myListAdapter.notifyDataSetChanged();               //提醒RecyclerView狀態改變
             }
         });
         //浮游確定刪除紐
@@ -145,10 +145,10 @@ public class SecondFragment extends Fragment {
     }
     //讀取帳密資料存到login陣列
     private void readFile(){
-        String p = getContext().getExternalFilesDir("").getAbsoluteFile().toString() ;  //獲取路徑字串
+        String p = getContext().getExternalFilesDir("").getAbsoluteFile().toString() ;  //獲取包下的路徑字串
         File path = new File(p); //開啟檔案路徑
-        File[] file = path.listFiles();    //列出所有目錄裡的資料
-        login = new String[file.length];    //在此處定義陣列大小 否則會閃退
+        File[] file = path.listFiles();    //列出所有目錄裡的資料放到陣列裡
+        login = new String[file.length];    //在此處定義所要存入的陣列大小 否則會因無宣告初始值而閃退
         try{
             for (int i = 0;i < file.length;i++){
                 FileInputStream fin = new FileInputStream(file[i]);
@@ -184,7 +184,7 @@ public class SecondFragment extends Fragment {
             private View mView;
             public ViewHolder(@NonNull View itemView) {
                 super(itemView);
-                tvSub1 = itemView.findViewById(R.id.textView_sub1);
+                tvSub1 = itemView.findViewById(R.id.textView_sub1);     //獲取介面元件
                 tvSub2 = itemView.findViewById(R.id.textView_sub2);
                 tvDate  = itemView.findViewById(R.id.createDate);
                 cbSelect = itemView.findViewById(R.id.cbSelect);
@@ -217,7 +217,7 @@ public class SecondFragment extends Fragment {
                     cbHow[position] = isChecked;
                 }
             });
-            holder.mView.setOnClickListener((v)->{
+            holder.mView.setOnClickListener((v)->{      //當你點擊列表的項目時會觸發的動作
                 Toast.makeText(getActivity().getBaseContext(),"這個帳號是在" + holder.tvDate.getText() + "時創立的",Toast.LENGTH_SHORT).show();
             });
 
