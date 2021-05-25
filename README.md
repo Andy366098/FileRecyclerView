@@ -8,6 +8,8 @@
 以及在build.gradle(Module)的dependencies裡要加上implementation 'androidx.swiperefreshlayout:swiperefreshlayout:1.1.0'，這是個下拉刷新的功能
 額外還付了一個練習用的跳轉至外部程式的按鈕
 
+注：本人為Android新手，因此有些注釋的用詞可能不太準確，請見諒
+
 展示：
 ![image](https://github.com/Andy366098/FileRecyclerView/blob/master/Screenshot_20210525-090249816.jpg)
 ![image](https://github.com/Andy366098/FileRecyclerView/blob/master/Screenshot_20210525-090303022.jpg)
