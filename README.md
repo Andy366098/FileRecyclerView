@@ -20,3 +20,5 @@ uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"
 展示：
 ![image](https://github.com/Andy366098/FileRecyclerView/blob/master/Screenshot_20210525-090249816.jpg)
 ![image](https://github.com/Andy366098/FileRecyclerView/blob/master/Screenshot_20210525-090303022.jpg)
+
+參考網站：https://thumbb13555.pixnet.net/blog/post/311803031
