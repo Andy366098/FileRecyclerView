@@ -10,3 +10,4 @@
 
 展示：
 ![image](https://github.com/Andy366098/FileRecyclerView/blob/master/Screenshot_20210525-090249816.jpg)
+![image](https://github.com/Andy366098/FileRecyclerView/blob/master/Screenshot_20210525-090303022.jpg)
